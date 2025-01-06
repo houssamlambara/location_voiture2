@@ -53,7 +53,7 @@ CREATE TABLE VOITURE (
 
 CREATE TABLE RESERVATIONS (
     id INT(11) PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(255) NOT NULL;
+    username VARCHAR(255) NOT NULL,
     user_id INT(11),
     voiture_id INT(11), 
     pickup_date DATE NOT NULL,
@@ -65,23 +65,22 @@ CREATE TABLE RESERVATIONS (
     FOREIGN KEY (user_id) REFERENCES USERS(id) ON DELETE CASCADE,
     FOREIGN KEY (voiture_id) REFERENCES VOITURE(id) ON DELETE CASCADE
 );
-DELEMETUR //
-CREATE procedure ajoutReservation(
+
+CREATE PROCEDURE ajoutReservation(
     IN user_id INT,
     IN voiture_id INT,
-    IN pickup_date date,
-    IN return_date date ,
-    In total_price DECIMAL(10,2)
- 
+    IN pickup_date DATE,
+    IN return_date DATE,
+    IN total_price DECIMAL(10,2)
 )
 BEGIN 
-Insert into RESERVATIONS(user_id,voiture_id,pickup_date,return_date,total_price)
-values(user_id,voiture_id,pickup_date,return_date,total_price);
-UPDATE VOITURE
-set  status='Reserver'
-where id=voiture_id;
-END;//
+    INSERT INTO RESERVATIONS(user_id, voiture_id, pickup_date, return_date, total_price)
+    VALUES(user_id, voiture_id, pickup_date, return_date, total_price);
 
+    UPDATE VOITURE
+    SET status = 'Reserver'
+    WHERE id = voiture_id;
+END;
 
 CREATE TABLE REVIEWS (
     id INT(11) PRIMARY KEY AUTO_INCREMENT,
@@ -94,4 +93,58 @@ CREATE TABLE REVIEWS (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES USERS(id) ON DELETE CASCADE,
     FOREIGN KEY (voiture_id) REFERENCES VOITURE(id) ON DELETE CASCADE
+);
+
+CREATE TABLE THEMES (
+    id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ARTICLES (
+    id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    image_url VARCHAR(255),
+    video_url VARCHAR(255),
+    theme_id INT(11) NOT NULL,
+    user_id INT(11) NOT NULL,
+    status ENUM('En attente', 'Approuvé', 'Rejeté') DEFAULT 'En attente',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (theme_id) REFERENCES THEMES(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES USERS(id) ON DELETE CASCADE
+);
+
+CREATE TABLE TAGS (
+    id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE ARTICLE_TAGS (
+    article_id INT(11),
+    tag_id INT(11),
+    PRIMARY KEY (article_id, tag_id),
+    FOREIGN KEY (article_id) REFERENCES ARTICLES(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES TAGS(id) ON DELETE CASCADE
+);
+
+CREATE TABLE COMMENTS (
+    id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    article_id INT(11) NOT NULL,
+    user_id INT(11) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (article_id) REFERENCES ARTICLES(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES USERS(id) ON DELETE CASCADE
+);
+
+CREATE TABLE FAVORITES (
+    user_id INT(11),
+    article_id INT(11),
+    PRIMARY KEY (user_id, article_id),
+    FOREIGN KEY (user_id) REFERENCES USERS(id) ON DELETE CASCADE,
+    FOREIGN KEY (article_id) REFERENCES ARTICLES(id) ON DELETE CASCADE
 );

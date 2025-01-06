@@ -16,6 +16,14 @@ class Database
             echo "Connection failed: " . $e->getMessage();
         }
     }
+    public static function getInstance()
+    {
+        static $instance = null;
+        if ($instance === null) {
+            $instance = new Database();
+        }
+        return $instance;
+    }
 
     public function getConnection()
     {
