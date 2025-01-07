@@ -12,10 +12,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $prix_par_jour = $_POST['prix_par_jour'];
     $image_url = '';
 
-    if (isset($_FILES['image_url']) && $_FILES['image_url']['error'] == 0) {
-        $upload_dir = 'uploads/';
-        $image_url = $upload_dir . basename($_FILES['image_url']['name']);
-        move_uploaded_file($_FILES['image_url']['tmp_name'], $image_url);
+
+    if (isset($_FILES['image_url']['name']) && !empty($_FILES['image_url']['name'])) {
+        $dir = '../uploads';
+        $path = basename($_FILES['image_url']['name']);
+        $finalPath = $dir . uniqid() . "" . $path;
+        $allowedExtensions = ['png', 'jpg', 'jpeg', 'gif', 'svg'];
+        $extension = pathinfo($finalPath, PATHINFO_EXTENSION);
+        if (in_array(strtolower($extension), $allowedExtensions)) {
+            if (move_uploaded_file($_FILES['image_url']['tmp_name'], $finalPath)) {
+
+            } else {
+
+                echo "Erreur lors du téléchargement de l'image pour le véhicule : " . $_POST['nom'];
+            }
+        } else {
+            echo "Extension non autorisée pour le fichier : " . $_FILES['image_url']['name'];
+        }
     }
 
     try {
@@ -27,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':model', $model);
         $stmt->bindParam(':category_id', $category_id);
         $stmt->bindParam(':description', $description);
-        $stmt->bindParam(':image_url', $image_url);
+        $stmt->bindParam(':image_url', $finalPath);
         $stmt->bindParam(':prix_par_jour', $prix_par_jour);
 
         if ($stmt->execute()) {
