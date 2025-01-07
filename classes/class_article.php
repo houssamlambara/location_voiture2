@@ -1,10 +1,27 @@
 <?php
+require_once 'db.php';
 
 class Article {
     private $db;
 
     public function __construct() {
         $this->db = Database::getInstance()->getConnection();
+    }
+
+    public function getAll() {
+        $sql = "SELECT * FROM ARTICLES";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getById($id) {
+        $sql = "SELECT a.*, t.name as theme_name FROM ARTICLES a
+                JOIN THEMES t ON a.theme_id = t.id
+                WHERE a.id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function create($title, $content, $imageUrl, $videoUrl, $themeId, $userId) {
