@@ -153,7 +153,7 @@
               <td class="border border-black px-4 py-2"><?php echo $row["total_price"] ?>$</td>
               <td class="border border-black px-4 py-2">
                 <form action="../classes/update_status.php" method="POST">
-                  <input type="hidden" name="reservation" value="<?php echo $row['id']; ?>">
+                  <input type="hidden" name="reservation_id" value="<?php echo $row['id']; ?>">
                   <select name="status" onchange="this.form.submit()">
                     <option value="En attente" <?php if ($row['status'] == 'En attente') echo 'selected'; ?>>En attente</option>
                     <option value="Confirmer" <?php if ($row['status'] == 'Confirmer') echo 'selected'; ?>>Confirmer</option>
@@ -162,13 +162,14 @@
                 </form>
               </td>
               <td class="border border-black px-4 py-2">
-                <form action="./delete_reservation.php" method="POST">
+                <form action="../classes/delete_reservation.php" method="POST">
                   <input type="hidden" name="reservation_id" value="<?php echo $row['id']; ?>">
                   <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
                 </form>
               </td>
             </tr>
           <?php endwhile; ?>
+
         </tbody>
       </table>
     </div>

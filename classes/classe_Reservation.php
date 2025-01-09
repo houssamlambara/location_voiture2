@@ -1,4 +1,4 @@
-    <?php
+     <?php
 
     class Reservation
     {
@@ -47,103 +47,183 @@
                 return "Erreur PDO : " . $e->getMessage();
             }
         }
-        public function getAllReservations($pdo)
-        {
-            try {
-                $query = "SELECT r.id, r.pickup_date, r.return_date, r.total_price, r.status, 
-                                 v.model AS voiture_model, u.username AS utilisateur
-                          FROM reservations r
-                          JOIN voiture v ON r.voiture_id = v.id
-                          JOIN users u ON r.user_id = u.id
-                          ORDER BY r.created_at DESC";
-                $stmt = $pdo->prepare($query);
-                $stmt->execute();
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } catch (PDOException $e) {
-                return "Erreur PDO : " . $e->getMessage();
-            }
-        }
+    //     // public function getAllReservations($pdo)
+    //     // {
+    //     //     try {
+    //     //         $query = "SELECT r.id, r.pickup_date, r.return_date, r.total_price, r.status, 
+    //     //                          v.model AS voiture_model, u.username AS utilisateur
+    //     //                   FROM reservations r
+    //     //                   JOIN voiture v ON r.voiture_id = v.id
+    //     //                   JOIN users u ON r.user_id = u.id
+    //     //                   ORDER BY r.created_at DESC";
+    //     //         $stmt = $pdo->prepare($query);
+    //     //         $stmt->execute();
+    //     //         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //     //     } catch (PDOException $e) {
+    //     //         return "Erreur PDO : " . $e->getMessage();
+    //     //     }
+    //     // }
+    //     public function getAllReservations()
+    // {
+    //     $sql = "SELECT reservations.*, users.username FROM reservations JOIN users ON reservations.user_id = users.id";
+    //     $stmt = $this->db->prepare($sql);
+    //     $stmt->execute();
+    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // }
 
-        public static function getReservationById($pdo, $id)
-        {
-            try {
-                $stmt = $pdo->prepare("SELECT * FROM `reservations` WHERE `id` = :id");
-                $stmt->execute(['id' => $id]);
-                $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                return $reservation ?: null;
-            } catch (Exception $e) {
-                error_log("Erreur lors de l'insertion : " . $e->getMessage());
-                return "Couldn't fetch reservation: " . $e->getMessage();
-            }
-        }
+    //     public static function getReservationById($pdo, $id)
+    //     {
+    //         try {
+    //             $stmt = $pdo->prepare("SELECT * FROM `reservations` WHERE `id` = :id");
+    //             $stmt->execute(['id' => $id]);
+    //             $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        public static function getMyReservations($pdo, $userId)
-        {
-            try {
-                $stmt = $pdo->prepare("SELECT * FROM `reservations` WHERE `user_id` = :userId");
-                $stmt->execute(['userId' => $userId]);
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } catch (Exception $e) {
-                return "Couldn't fetch reservations: " . $e->getMessage();
-            }
-        }
+    //             return $reservation ?: null;
+    //         } catch (Exception $e) {
+    //             error_log("Erreur lors de l'insertion : " . $e->getMessage());
+    //             return "Couldn't fetch reservation: " . $e->getMessage();
+    //         }
+    //     }
 
-        public function modifierReservation($pdo)
-        {
-            try {
-                $stmt = $pdo->prepare("UPDATE `reservations` SET 
-                                        `voiture_id` = :voiture_id, 
-                                        `pickup_date` = :pickup_date, 
-                                        `return_date` = :return_date, 
-                                        `total_price` = :total_price, 
-                                        `status` = :status
-                                        WHERE `id` = :id");
-                $stmt->execute([
-                    'voiture_id' => $this->voiture_id,
-                    'pickup_date' => $this->pickup_date,
-                    'return_date' => $this->return_date,
-                    'total_price' => $this->total_price,
-                    'status' => $this->status,
-                    'id' => $this->id
-                ]);
-                return "Reservation updated successfully.";
-            } catch (Exception $e) {
-                return "Couldn't update reservation: " . $e->getMessage();
-            }
-        }
+    //     public static function getMyReservations($pdo, $userId)
+    //     {
+    //         try {
+    //             $stmt = $pdo->prepare("SELECT * FROM `reservations` WHERE `user_id` = :userId");
+    //             $stmt->execute(['userId' => $userId]);
+    //             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //         } catch (Exception $e) {
+    //             return "Couldn't fetch reservations: " . $e->getMessage();
+    //         }
+    //     }
 
-        public static function deleteReservation($pdo, $id)
-        {
-            try {
-                $stmt = $pdo->prepare("DELETE FROM `reservations` WHERE `id` = :id");
-                $stmt->execute(['id' => $id]);
-                return "Reservation deleted successfully.";
-            } catch (Exception $e) {
-                return "Couldn't delete reservation: " . $e->getMessage();
-            }
-        }
+    //     public function modifierReservation($pdo)
+    //     {
+    //         try {
+    //             $stmt = $pdo->prepare("UPDATE `reservations` SET 
+    //                                     `voiture_id` = :voiture_id, 
+    //                                     `pickup_date` = :pickup_date, 
+    //                                     `return_date` = :return_date, 
+    //                                     `total_price` = :total_price, 
+    //                                     `status` = :status
+    //                                     WHERE `id` = :id");
+    //             $stmt->execute([
+    //                 'voiture_id' => $this->voiture_id,
+    //                 'pickup_date' => $this->pickup_date,
+    //                 'return_date' => $this->return_date,
+    //                 'total_price' => $this->total_price,
+    //                 'status' => $this->status,
+    //                 'id' => $this->id
+    //             ]);
+    //             return "Reservation updated successfully.";
+    //         } catch (Exception $e) {
+    //             return "Couldn't update reservation: " . $e->getMessage();
+    //         }
+    //     }
 
-        public function annulerReservation($pdo)
-        {
-            try {
-                $stmt = $pdo->prepare("UPDATE `reservations` SET 
-                                        `status` = :status 
-                                        WHERE `id` = :id");
-                $stmt->execute([
-                    'status' => $this->status,
-                    'id' => $this->id
-                ]);
-                return "Reservation status updated successfully.";
-            } catch (Exception $e) {
-                return "Couldn't update reservation status: " . $e->getMessage();
-            }
-        }
+        // public static function deleteReservation($pdo, $id)
+        // {
+        //     try {
+        //         $stmt = $pdo->prepare("DELETE FROM `reservations` WHERE `id` = :id");
+        //         $stmt->execute(['id' => $id]);
+        //         return "Reservation deleted successfully.";
+        //     } catch (Exception $e) {
+        //         return "Couldn't delete reservation: " . $e->getMessage();
+        //     }
+        // }
 
-        public function __toString()
-        {
-            return "Mon statut est: " . $this->status;
+    //     public function deleteReservation($reservation_id)
+    //     {
+    //         $stmt = $this->db->prepare("DELETE FROM reservations WHERE id = ?");
+    //         if ($stmt->execute([$reservation_id])) {
+    //             return true;
+    //         } else {
+    //             $errorInfo = $stmt->errorInfo();
+    //             echo "Erreur lors de la suppression de la réservation: " . $errorInfo[2];
+    //             return false;
+    //         }
+    //     }
+
+    //     public function annulerReservation($pdo)
+    //     {
+    //         try {
+    //             $stmt = $pdo->prepare("UPDATE `reservations` SET 
+    //                                     `status` = :status 
+    //                                     WHERE `id` = :id");
+    //             $stmt->execute([
+    //                 'status' => $this->status,
+    //                 'id' => $this->id
+    //             ]);
+    //             return "Reservation status updated successfully.";
+    //         } catch (Exception $e) {
+    //             return "Couldn't update reservation status: " . $e->getMessage();
+    //         }
+    //     }
+        
+    // public function updateStatus($reservation_id, $status)
+    // {
+    //     $stmt = $this->db->prepare("UPDATE reservations SET status = ? WHERE id = ?");
+    //     if ($stmt->execute([$status, $reservation_id])) {
+    //         return true;
+    //     } else {
+    //         $errorInfo = $stmt->errorInfo();
+    //         echo "Erreur lors de la mise à jour du statut: " . $errorInfo[2];
+    //         return false;
+    //     }
+    // }
+
+    //     public function __toString()
+    //     {
+    //         return "Mon statut est: " . $this->status;
+    //     }
+    }
+
+
+
+include_once 'db.php';
+
+class Reservation1
+{
+    private $db;
+
+    public function __construct()
+    {
+        $database = new Database();
+        $this->db = $database->getConnection();
+    }
+
+    public function getAllReservations()
+    {
+        $sql = "SELECT reservations.*, users.username FROM reservations JOIN users ON reservations.user_id = users.id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateStatus($reservation_id, $status)
+    {
+        $stmt = $this->db->prepare("UPDATE reservations SET status = ? WHERE id = ?");
+        if ($stmt->execute([$status, $reservation_id])) {
+            return true;
+        } else {
+            $errorInfo = $stmt->errorInfo();
+            echo "Erreur lors de la mise à jour du statut: " . $errorInfo[2];
+            return false;
         }
     }
 
-    ?>
+    public function deleteReservation($reservation_id)
+    {
+        $stmt = $this->db->prepare("DELETE FROM reservations WHERE id = ?");
+        if ($stmt->execute([$reservation_id])) {
+            return true;
+        } else {
+            $errorInfo = $stmt->errorInfo();
+            echo "Erreur lors de la suppression de la réservation: " . $errorInfo[2];
+            return false;
+        }
+    }
+}
+
+
+    ?> 
