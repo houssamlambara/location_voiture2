@@ -40,6 +40,7 @@
                         <a href="./front_end/blog.php" class="text-white nav-hover hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium">Blog</a>
                         <a href="./front_end/article.php" class="text-white nav-hover hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium">Article</a>
 
+
                     </div>
                 </div>
                 <div>

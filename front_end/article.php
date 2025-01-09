@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (in_array(strtolower($extension), $allowedExtensions)) {
             if (move_uploaded_file($_FILES['image_url']['tmp_name'], $finalPath)) {
-                $imageUrl = $finalPath; 
+                $imageUrl = $finalPath;
             } else {
                 echo "Erreur lors du téléchargement de l'image.";
             }
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $themeId = isset($_POST['category']) ? $_POST['category'] : null;
-    $userId = $_SESSION['id_user']; 
+    $userId = $_SESSION['id_user'];
     if (!$title || !$content || !$imageUrl || !$themeId || !$userId) {
         echo "Erreur : Veuillez remplir tous les champs obligatoires.";
         exit();
@@ -219,3 +219,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </body>
 
 </html>
+<!-- Footer Amélioré -->
+<footer class="bg-gradient-to-r from-gray-900 to-black text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+            <!-- Colonnes précédentes avec des améliorations visuelles subtiles -->
+            <div>
+                <img src="https://via.placeholder.com/150x50?text=RoadRover" alt="RoadRover Logo" class="mb-4 mx-auto transform hover:scale-110 transition duration-300">
+                <p class="text-sm text-gray-400">RoadRover - Votre partenaire de confiance pour la location de voitures de luxe.</p>
+            </div>
+
+            <div>
+                <h4 class="font-bold mb-4 text-yellow-500">Liens Rapides</h4>
+                <ul class="space-y-2">
+                    <li><a href="#home" class="hover:text-yellow-400 transition duration-300">Accueil</a></li>
+                    <li><a href="#cars" class="hover:text-yellow-400 transition duration-300">Véhicules</a></li>
+                    <li><a href="#reservation" class="hover:text-yellow-400 transition duration-300">Réservation</a></li>
+                    <li><a href="#about" class="hover:text-yellow-400 transition duration-300">À Propos</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold mb-4 text-yellow-500">Contact</h4>
+                <ul class="space-y-2">
+                    <li><i class="fas fa-phone mr-2 text-yellow-500"></i>+33 1 23 45 67 89</li>
+                    <li><i class="fas fa-envelope mr-2 text-yellow-500"></i>contact@roadrover.com</li>
+                    <li><i class="fas fa-map-marker-alt mr-2 text-yellow-500"></i>Paris, France</li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold mb-4 text-yellow-500">Suivez-nous</h4>
+                <div class="flex space-x-4 justify-center">
+                    <a href="#" class="text-2xl hover:text-yellow-400 transform hover:scale-125 transition duration-300"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-2xl hover:text-yellow-400 transform hover:scale-125 transition duration-300"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-2xl hover:text-yellow-400 transform hover:scale-125 transition duration-300"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-2xl hover:text-yellow-400 transform hover:scale-125 transition duration-300"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 pt-8 border-t border-gray-800 text-center">
+            <p class="text-sm text-gray-400">&copy; 2024 LuxAuto. Tous droits réservés.</p>
+        </div>
+    </div>
+</footer>
