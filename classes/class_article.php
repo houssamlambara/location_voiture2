@@ -18,6 +18,29 @@ class Article
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    function showAllarticle()
+  {
+    $req = "SELECT * FROM articles ";
+    $stmt = $this->db->prepare($req);
+    $result = $stmt->execute();
+    if ($result) {
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+      return [];
+    }
+  }
+  function totalarticle()
+  {
+    $req = "SELECT COUNT(*) as total FROM articles";
+    $stmt = $this->db->prepare($req);
+    $result = $stmt->execute();
+    if ($result) {
+      return $stmt->fetch(PDO::FETCH_ASSOC);
+    } else {
+      return [];
+    }
+  }
+
     public function getById($id)
     {
         $sql = "SELECT a.*, t.name as theme_name FROM ARTICLES a
@@ -27,6 +50,19 @@ class Article
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    function pagination($page)
+  {
+    $parpage = 8;
+    $premier = ($page * $parpage) - $parpage;
+    $req = "SELECT * FROM articles LIMIT $premier, $parpage";
+    $stmt = $this->db->prepare($req);
+    $result = $stmt->execute();
+    if ($result) {
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+      return [];
+    }
+  }
 
     public function create($title, $content, $imageUrl, $themeId, $userId)
     {

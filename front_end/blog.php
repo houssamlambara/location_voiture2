@@ -68,31 +68,30 @@
         <!-- Voitures -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <?php
-            require_once '../classes/vehicule.php';
+            require_once '../classes/class_article.php';
 
-            $voiture = new Vehicule();
-            $allCars = $voiture->showAllvehicules();
-            $total = $voiture->totalvihuicules();
+            $article = new article();
+            $allarticle = $article->showAllarticle();
+            $total = $article->totalarticle();
             $nmbpage = ceil($total['total'] / 6);
             $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-            $vehicules = $voiture->pagination($page);
+            $articles = $article->pagination($page);
 
-            foreach ($vehicules as $car):
+            foreach ($articles as $blog):
             ?>
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105">
-                    <img src="<?= htmlspecialchars($car['image_url']) ?>" alt="<?= htmlspecialchars($car['model']) ?>" class="w-full h-48 object-cover">
+                    <img src="<?= htmlspecialchars($blog['image_url']) ?>" alt="<?= htmlspecialchars($blog['title']) ?>" class="w-full h-48 object-cover">
                     <div class="p-4">
-                        <h3 class="text-xl font-semibold mb-2"><?= htmlspecialchars($car['model']) ?></h3>
+                        <h3 class="text-xl font-semibold mb-2"><?= htmlspecialchars($blog['content']) ?></h3>
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600"><?= htmlspecialchars($car['prix_par_jour']) ?>/jour</span>
+                            <span class="text-gray-600"><?= htmlspecialchars($blog['theme_id']) ?>/jour</span>
                             <div class="flex items-center">
                                 <i class="fas fa-user mr-2"></i>4
                                 <i class="fas fa-gas-pump ml-2 mr-2"></i>Essence
                             </div>
                         </div>
                         <div class="mt-4 flex space-x-2">
-                            <a href="../front_end/reservation.php" class="w-full bg-yellow-500 text-white py-2 rounded-md hover:bg-yellow-400 text-center flex items-center justify-center">Réserver</a>
-                            <button class="w-full bg-gray-200 text-gray-800 py-2 rounded-md hover:bg-gray-300">Voir détail</button>
+                            <a href="../front_end/reservation.php" class="w-full bg-yellow-500 text-white py-2 rounded-md hover:bg-yellow-400 text-center flex items-center justify-center">Lire L'article</a>
                         </div>
                     </div>
                 </div>

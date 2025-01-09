@@ -119,41 +119,48 @@
   </aside>
 
   <div class="col-span-1 md:col-span-2 bg-white p-6 rounded-lg shadow-md overflow-x-auto mt-20 lg:ml-64 ">
-    <h2 class="flex justify-center text-2xl font-bold mb-8 text-yellow-500">Liste des Clients</h2>
-    <div>
-      <table class="w-full border-collapse border border-gray-400">
-        <thead class="bg-black">
-          <tr>
-            <th class="border border-black text-white px-4 py-2">ID</th>
-            <th class="border border-black text-white px-4 py-2">Username</th>
-            <th class="border border-black text-white px-4 py-2">Email</th>
-            <th class="border border-black text-white px-4 py-2">Phone</th>
-            <th class="border border-black text-white px-4 py-2">Role ID</th>
+  <h2 class="flex justify-center text-2xl font-bold mb-8 text-yellow-500">Liste des Clients</h2>
+  <div>
+    <table class="w-full border-collapse border border-gray-400">
+      <thead class="bg-black">
+        <tr>
+          <th class="border border-black text-white px-4 py-2">ID</th>
+          <th class="border border-black text-white px-4 py-2">Username</th>
+          <th class="border border-black text-white px-4 py-2">Email</th>
+          <th class="border border-black text-white px-4 py-2">Phone</th>
+          <th class="border border-black text-white px-4 py-2">Role ID</th>
+          <th class="border border-black text-white px-4 py-2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        include("../classes/db.php");
+        $db = new Database();
+        $conn = $db->getConnection();
+
+        $sql = "SELECT * FROM `users`";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+          <tr class="hover:bg-orange-500">
+            <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["id"]); ?></td>
+            <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["username"]); ?></td>
+            <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["email"]); ?></td>
+            <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["phone"]); ?></td>
+            <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["role_id"]); ?></td>
+            <td class="border border-black px-4 py-2">
+              <form action="../classes/delete_reservation.php" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                <input type="hidden" name="reservation_id" value="<?php echo $row['id']; ?>">
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
+              </form>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          <?php
-          include("../classes/db.php");
-          $db = new Database();
-          $conn = $db->getConnection();
-
-          $sql = "SELECT * FROM `users`";
-          $stmt = $conn->prepare($sql);
-          $stmt->execute();
-
-          while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
-            <tr class="hover:bg-orange-500">
-              <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["id"]); ?></td>
-              <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["username"]); ?></td>
-              <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["email"]); ?></td>
-              <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["phone"]); ?></td>
-              <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["role_id"]); ?></td>
-            </tr>
-          <?php endwhile; ?>
-        </tbody>
-      </table>
-    </div>
+        <?php endwhile; ?>
+      </tbody>
+    </table>
   </div>
+</div>
 
   <script>
     document.getElementById('menu-toggle').addEventListener('click', function() {

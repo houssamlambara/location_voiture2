@@ -162,37 +162,60 @@
     </div>
 
     <div class="col-span-1 md:col-span-2 bg-white p-6 rounded-lg shadow-md overflow-x-auto lg:ml-64">
-      <h2 class="text-center text-2xl font-bold mb-8 text-yellow-500">List Voiture</h2>
-      <div>
-        <table class="w-full border-collapse border border-gray-400">
-          <thead class="bg-black">
-            <tr>
-              <th class="border border-black text-white px-4 py-2">Model</th>
-              <th class="border border-black text-white px-4 py-2">Description</th>
-              <th class="border border-black text-white px-4 py-2">Image</th>
-              <th class="border border-black text-white px-4 py-2">Prix</th>
-              <th class="border border-black text-white px-4 py-2">Statut</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            $sql = "SELECT * FROM `voiture`";
-            $res = $conn->query($sql);
-            while ($row = $res->fetch(PDO::FETCH_ASSOC)):
-            ?>
-              <tr class="hover:bg-orange-500">
-                <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["model"]); ?></td>
-                <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["description"]); ?></td>
-                <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["image_url"]); ?></td>
-                <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["prix_par_jour"]); ?></td>
-                <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["status"]); ?></td>
-              </tr>
-            <?php endwhile; ?>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <h2 class="text-center text-2xl font-bold mb-8 text-yellow-500">List Voiture</h2>
+  <div>
+    <table class="w-full border-collapse border border-gray-400">
+      <thead class="bg-black">
+        <tr>
+          <th class="border border-black text-white px-4 py-2">Model</th>
+          <th class="border border-black text-white px-4 py-2">Description</th>
+          <th class="border border-black text-white px-4 py-2">Image</th>
+          <th class="border border-black text-white px-4 py-2">Prix</th>
+          <th class="border border-black text-white px-4 py-2">Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        include_once("../classes/db.php");
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_status'])) {
+            $car_id = $_POST['car_id']; 
+            $new_status = $_POST['status']; 
+
+            $update_sql = "UPDATE voiture SET status = :status WHERE id = :id";
+            $stmt = $conn->prepare($update_sql);
+            $stmt->bindParam(':status', $new_status);
+            $stmt->bindParam(':id', $car_id);
+            $stmt->execute();
+        }
+
+        $sql = "SELECT * FROM `voiture`";
+        $res = $conn->query($sql);
+        while ($row = $res->fetch(PDO::FETCH_ASSOC)):
+        ?>
+          <tr class="hover:bg-orange-500">
+            <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["model"]); ?></td>
+            <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["description"]); ?></td>
+            <td class="border border-black px-4 py-2">
+              <img src="<?php echo htmlspecialchars($row["image_url"]); ?>" alt="Image" class="w-16 h-16 object-cover">
+            </td>
+            <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["prix_par_jour"]); ?> €</td>
+            <td class="border border-black px-4 py-2">
+              <form method="POST" action="">
+                <input type="hidden" name="car_id" value="<?php echo $row['id']; ?>">
+                <select name="status" class="bg-gray-200 p-2 rounded" onchange="this.form.submit()">
+                  <option value="disponible" <?php if ($row['status'] === 'disponible') echo 'selected'; ?>>Disponible</option>
+                  <option value="indisponible" <?php if ($row['status'] === 'indisponible') echo 'selected'; ?>>Indisponible</option>
+                </select>
+                <input type="hidden" name="change_status" value="1"> 
+              </form>
+            </td>
+          </tr>
+        <?php endwhile; ?>
+      </tbody>
+    </table>
   </div>
+</div>
 
   <script>
     document.getElementById('menu-toggle').addEventListener('click', function() {

@@ -154,7 +154,7 @@
               <td class="border border-black px-4 py-2">
                 <form action="../classes/update_status.php" method="POST">
                   <input type="hidden" name="reservation_id" value="<?php echo $row['id']; ?>">
-                  <select name="status" onchange="this.form.submit()">
+                  <select name="status" class="bg-gray-200 p-2 rounded" onchange="this.form.submit()">
                     <option value="En attente" <?php if ($row['status'] == 'En attente') echo 'selected'; ?>>En attente</option>
                     <option value="Confirmer" <?php if ($row['status'] == 'Confirmer') echo 'selected'; ?>>Confirmer</option>
                     <option value="Annuler" <?php if ($row['status'] == 'Annuler') echo 'selected'; ?>>Annuler</option>
@@ -163,18 +163,18 @@
               </td>
               <td class="border border-black px-4 py-2">
                 <form action="../classes/delete_reservation.php" method="POST">
-                  <input type="hidden" name="reservation_id" value="<?php echo $row['id']; ?>">
+                  <input type="hidden" name="usee_id" value="<?php echo $row['id']; ?>">
                   <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
                 </form>
               </td>
             </tr>
           <?php endwhile; ?>
-
         </tbody>
       </table>
     </div>
   </div>
   </div>
+
   <script>
     document.getElementById('menu-toggle').addEventListener('click', function() {
       const sidebar = document.getElementById('logo-sidebar');
