@@ -24,11 +24,11 @@ class Article {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function create($title, $content, $imageUrl, $videoUrl, $themeId, $userId) {
-        $sql = "INSERT INTO ARTICLES (title, content, image_url, video_url, theme_id, user_id) 
+    public function create($title, $content, $imageUrl, $themeId, $userId) {
+        $sql = "INSERT INTO ARTICLES (title, content, image_url, theme_id, user_id) 
                 VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$title, $content, $imageUrl, $videoUrl, $themeId, $userId]);
+        return $stmt->execute([$title, $content, $imageUrl, $themeId, $userId]);
     }
 
     public function updateStatus($id, $status) {

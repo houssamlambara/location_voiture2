@@ -1,3 +1,21 @@
+<?php 
+
+include_once("../classes/db.php");
+
+try {
+    $db = new Database();
+    $pdo = $db->getConnection();
+
+    $stmt = $pdo->prepare("SELECT * FROM themes");
+    $stmt->execute();
+
+    $themes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "<option value=''>Erreur de chargement des thèmes</option>";
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -52,91 +70,99 @@
 
     <!-- Main Content with Padding Top to Account for Fixed Navbar -->
     <main class="pt-24 pb-12 px-4">
-        <form class="max-w-2xl mx-auto p-8 bg-white rounded-xl shadow-lg" method="POST" enctype="multipart/form-data">
-            <h2 class="text-3xl font-bold mb-8 text-gray-800">Ajouter un nouvel article</h2>
+    <form class="max-w-2xl mx-auto p-8 bg-white rounded-xl shadow-lg" method="POST" enctype="multipart/form-data">
+    <h2 class="flex justify-center text-3xl font-bold mb-8 text-yellow-400">Ajouter un nouvel article</h2>
 
-            <div class="space-y-6">
-                <!-- Titre -->
-                <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-                        Titre de l'article
-                    </label>
-                    <input type="text" id="title" name="title" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required>
-                </div>
+    <div class="space-y-6">
+        <!-- Titre -->
+        <div>
+            <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                Titre de l'article
+            </label>
+            <input type="text" id="title" name="title" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required>
+        </div>
 
-                <!-- Catégorie -->
-                <div>
-                    <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
-                        Theme
-                    </label>
-                    <select id="category" name="category" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required>
-                        <option value="">Sélectionner un theme</option>
-                        <option value="vehicules">Véhicules</option>
-                        <option value="actualites">Actualités</option>
-                        <option value="conseils">Conseils</option>
-                        <option value="evenements">Événements</option>
-                    </select>
-                </div>
+        <!-- Catégorie -->
+        <div>
+            <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+                Sélectionner un thème
+            </label>
+            <select id="category" name="category" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required>
+                <option value="">Sélectionner un thème</option>
+                <?php
 
-                <!-- Image de couverture -->
-                <div>
-                    <label for="image_url" class="block text-sm font-medium text-gray-700 mb-2">
-                        Image de couverture
-                    </label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-yellow-500 transition duration-300">
-                        <div class="space-y-1 text-center">
-                            <i class="fas fa-image text-gray-400 text-3xl mb-3"></i>
-                            <div class="flex text-sm text-gray-600 justify-center">
-                                <label for="image_url" class="relative cursor-pointer bg-white rounded-md font-medium text-yellow-500 hover:text-yellow-600">
-                                    <span>Télécharger une image</span>
-                                    <input type="file" id="image_url" name="image_url" class="sr-only" accept="image/*" required>
-                                </label>
-                            </div>
-                            <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB</p>
-                        </div>
+                    if ($themes && count($themes) > 0) {
+                        foreach ($themes as $theme) {
+                            echo "<option value='" . htmlspecialchars($theme['id']) . "'>" . htmlspecialchars($theme['name']) . "</option>";
+                        }
+                    } else {
+                        echo "<option value=''>Aucun thème disponible</option>";
+                    }
+               
+                ?>
+            </select>
+        </div>
+
+        <!-- Image de couverture -->
+        <div>
+            <label for="image_url" class="block text-sm font-medium text-gray-700 mb-2">
+                Image de couverture
+            </label>
+            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-yellow-500 transition duration-300">
+                <div class="space-y-1 text-center">
+                    <i class="fas fa-image text-gray-400 text-3xl mb-3"></i>
+                    <div class="flex text-sm text-gray-600 justify-center">
+                        <label for="image_url" class="relative cursor-pointer bg-white rounded-md font-medium text-yellow-500 hover:text-yellow-600">
+                            <span>Télécharger une image</span>
+                            <input type="file" id="image_url" name="image_url" class="sr-only" accept="image/*" required>
+                        </label>
                     </div>
-                </div>
-
-                <!-- Contenu -->
-                <div>
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
-                        Contenu de l'article
-                    </label>
-                    <textarea id="content" name="content" rows="8" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required></textarea>
-                </div>
-
-                <!-- Tags (modifié en select simple) -->
-                <div>
-                    <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
-                        Tag principal
-                    </label>
-                    <select id="tags" name="tags" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300">
-                        <option value="">Sélectionner un tag</option>
-                        <option value="luxe">Luxe</option>
-                        <option value="sport">Sport</option>
-                        <option value="familiale">Familiale</option>
-                        <option value="citadine">Citadine</option>
-                        <option value="suv">SUV</option>
-                        <option value="electrique">Électrique</option>
-                        <option value="hybride">Hybride</option>
-                        <option value="occasion">Occasion</option>
-                        <option value="nouveaute">Nouveauté</option>
-                        <option value="performance">Performance</option>
-                    </select>
-                </div>
-
-                <div class="flex gap-4 pt-6">
-                    <button type="submit"
-                        class="flex-1 px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition duration-300">
-                        <i class="fas fa-paper-plane mr-2"></i>Publier
-                    </button>
-                    <button type="reset"
-                        class="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-300">
-                        <i class="fas fa-undo mr-2"></i>Réinitialiser
-                    </button>
+                    <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB</p>
                 </div>
             </div>
-        </form>
+        </div>
+
+        <!-- Contenu -->
+        <div>
+            <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
+                Contenu de l'article
+            </label>
+            <textarea id="content" name="content" rows="8" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required></textarea>
+        </div>
+
+        <!-- Tags -->
+        <div>
+            <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
+                Tag principal
+            </label>
+            <select id="tags" name="tags" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300">
+                <option value="">Sélectionner un tag</option>
+                <option value="luxe">Luxe</option>
+                <option value="sport">Sport</option>
+                <option value="familiale">Familiale</option>
+                <option value="citadine">Citadine</option>
+                <option value="suv">SUV</option>
+                <option value="electrique">Électrique</option>
+                <option value="hybride">Hybride</option>
+                <option value="occasion">Occasion</option>
+                <option value="nouveaute">Nouveauté</option>
+                <option value="performance">Performance</option>
+            </select>
+        </div>
+
+        <div class="flex gap-4 pt-6">
+            <button type="submit"
+                class="flex-1 px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition duration-300">
+                <i class="fas fa-paper-plane mr-2"></i>Publier
+            </button>
+            <button type="reset"
+                class="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-300">
+                <i class="fas fa-undo mr-2"></i>Réinitialiser
+            </button>
+        </div>
+    </div>
+</form>
+
     </main>
 </body>
 
