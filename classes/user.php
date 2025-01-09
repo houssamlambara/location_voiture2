@@ -28,7 +28,7 @@ class User
             if (is_numeric($user_id)) {
                 return "Utilisateur enregistré avec succès. ID utilisateur : " . $user_id;
             } else {
-                return $user_id; 
+                return $user_id;
             }
         }
         return "Méthode non autorisée.";
@@ -38,16 +38,16 @@ class User
     {
         try {
             $query = "INSERT INTO users (username, email, password,role_id) VALUES (:username, :email, :password,:role_id)";
-$role_id=2;
+            $role_id = 2;
             $stmt = $this->db->prepare($query);
 
             $stmt->bindParam(':username', $this->username);
             $stmt->bindParam(':email', $this->email);
-$stmt->bindParam(':role_id',$role_id);
+            $stmt->bindParam(':role_id', $role_id);
             $stmt->bindParam(':password', password_hash($this->password, PASSWORD_DEFAULT));
 
             if ($stmt->execute()) {
-                return $this->db->lastInsertId(); 
+                return $this->db->lastInsertId();
             } else {
                 return "Erreur lors de l'enregistrement de l'utilisateur.";
             }
@@ -55,4 +55,4 @@ $stmt->bindParam(':role_id',$role_id);
             return "Erreur SQL : " . $e->getMessage();
         }
     }
-} 
+}

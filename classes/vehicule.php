@@ -32,7 +32,8 @@ class Vehicule
     }
   }
 
-  function pagination($page){
+  function pagination($page)
+  {
     $parpage = 8;
     $premier = ($page * $parpage) - $parpage;
     $req = "SELECT * FROM voiture LIMIT $premier, $parpage";

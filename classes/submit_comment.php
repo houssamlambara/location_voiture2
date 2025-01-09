@@ -1,6 +1,6 @@
 <?php
-require_once '../classes/db.php';
-require_once '../classes/class_comment.php';
+include_once("db.php");
+require_once ("class_comment.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $articleId = $_POST['article_id'];
