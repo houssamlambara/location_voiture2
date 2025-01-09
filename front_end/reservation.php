@@ -210,7 +210,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="mt-8 pt-8 border-t border-gray-800 text-center">
-                <p class="text-sm text-gray-400">&copy; 2024 RoadRover. Tous droits réservés.</p>
+                <p class="text-sm text-gray-400">&copy; 2024 LuxAuto. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
