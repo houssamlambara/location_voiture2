@@ -107,7 +107,6 @@ CREATE TABLE ARTICLES (
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     image_url VARCHAR(255),
-    video_url VARCHAR(255),
     theme_id INT(11) NOT NULL,
     user_id INT(11) NOT NULL,
     status ENUM('En attente', 'Approuvé', 'Rejeté') DEFAULT 'En attente',

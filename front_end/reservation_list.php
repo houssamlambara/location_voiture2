@@ -152,8 +152,8 @@
               <td class="border border-black px-4 py-2"><?php echo $row["return_date"] ?></td>
               <td class="border border-black px-4 py-2"><?php echo $row["total_price"] ?>$</td>
               <td class="border border-black px-4 py-2">
-                <form action="./update_status.php" method="POST">
-                  <input type="hidden" name="reservation.php" value="<?php echo $row['id']; ?>">
+                <form action="../classes/update_status.php" method="POST">
+                  <input type="hidden" name="reservation" value="<?php echo $row['id']; ?>">
                   <select name="status" onchange="this.form.submit()">
                     <option value="En attente" <?php if ($row['status'] == 'En attente') echo 'selected'; ?>>En attente</option>
                     <option value="Confirmer" <?php if ($row['status'] == 'Confirmer') echo 'selected'; ?>>Confirmer</option>

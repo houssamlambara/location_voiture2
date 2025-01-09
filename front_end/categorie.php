@@ -57,13 +57,11 @@
             <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                 onclick="filterCars('all')">Tous</button>
             <button class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300"
-                onclick="filterCars('berlines')">Berlines</button>
+                onclick="filterCars('Sport')">Sport</button>
             <button class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300"
-                onclick="filterCars('suv')">SUV</button>
+                onclick="filterCars('SUV')">SUV</button>
             <button class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300"
-                onclick="filterCars('cabriolets')">Cabriolets</button>
-            <button class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300"
-                onclick="filterCars('electriques')">Électriques</button>
+                onclick="filterCars('Electric')">Électriques</button>
         </div>
 
         <!-- Voitures -->
@@ -176,7 +174,7 @@
             </div>
 
             <div class="mt-8 pt-8 border-t border-gray-800 text-center">
-                <p class="text-sm text-gray-400">&copy; 2024 RoadRover. Tous droits réservés.</p>
+                <p class="text-sm text-gray-400">&copy; 2024 LuxAuto. Tous droits réservés.</p>
             </div>
         </div>
     </footer>

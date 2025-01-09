@@ -153,9 +153,9 @@
                 <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105">
                     <img src="./img/AMG GT.jpeg" alt="Voiture de luxe" class="w-full h-64 object-cover">
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2">Berline de Luxe</h3>
+                        <h3 class="text-xl font-semibold mb-2">Sport Premium</h3>
                         <p class="text-gray-600">À partir de 200€/jour</p>
-                        <button class="mt-4 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Détails</button>
+                        <button class="mt-4 w-full bg-yellow-400 text-white py-2 rounded-md hover:bg-yellow-500">Détails</button>
                     </div>
                 </div>
                 <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105">
@@ -163,16 +163,16 @@
                     <div class="p-6">
                         <h3 class="text-xl font-semibold mb-2">SUV Premium</h3>
                         <p class="text-gray-600">À partir de 200€/jour</p>
-                        <button class="mt-4 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Détails</button>
+                        <button class="mt-4 w-full bg-yellow-400 text-white py-2 rounded-md hover:bg-yellow-500">Détails</button>
                     </div>
                 </div>
                 <div class="bg-gray-100 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105">
                     <img src="./img/tesla model S.jpg" alt="Cabriolet de luxe"
                         class="w-full h-64 object-cover">
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2">Cabriolet Sport</h3>
+                        <h3 class="text-xl font-semibold mb-2">Electrique Premium</h3>
                         <p class="text-gray-600">À partir de 160€/jour</p>
-                        <button class="mt-4 w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Détails</button>
+                        <button class="mt-4 w-full bg-yellow-400 text-white py-2 rounded-md hover:bg-yellow-500">Détails</button>
                     </div>
                 </div>
             </div>
@@ -220,7 +220,7 @@
             </div>
 
             <div class="mt-8 pt-8 border-t border-gray-800 text-center">
-                <p class="text-sm text-gray-400">&copy; 2024 RoadRover. Tous droits réservés.</p>
+                <p class="text-sm text-gray-400">&copy; 2024 LuxAuto. Tous droits réservés.</p>
             </div>
         </div>
     </footer>

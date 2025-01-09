@@ -1,7 +1,7 @@
 <?php
 session_start();
 include_once "../classes/db.php";
-include_once "../classes/signinController.php";
+include_once "../login/signinController.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <a href="../front_end/categorie.php" class="text-white nav-hover hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium">Nos Véhicules</a>
                         <a href="../front_end/reservation.php" class="text-white nav-hover hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium">Réservation</a>
                         <a href="../front_end/about.php" class="text-white nav-hover hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium">À Propos</a>
-                        <a href="../front_end/contact.php" class="text-white nav-hover hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                        <a href="../front_end/blog.php" class="text-white nav-hover hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium">Blog</a>
                     </div>
                 </div>
                 <div>
@@ -167,7 +167,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="mt-8 pt-8 border-t border-gray-800 text-center">
-                <p class="text-sm text-gray-400">&copy; 2024 RoadRover. Tous droits réservés.</p>
+                <p class="text-sm text-gray-400">&copy; 2024 LuxAuto. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
