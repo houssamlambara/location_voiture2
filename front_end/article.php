@@ -155,6 +155,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         ?>
                     </select>
                 </div>
+                <div>
+                    <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
+                        Sélectionner des tags
+                    </label>
+                    <select id="tags" name="tags[]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required>
+                        <option value="">Sélectionner des tags</option>
+                        <?php
+                        try {
+                            $stmt = $pdo->prepare("SELECT * FROM tags");
+                            $stmt->execute();
+                            $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        } catch (PDOException $e) {
+                            echo "<option value=''>Erreur de chargement des tags</option>";
+                        }
+
+                        if ($tags && count($tags) > 0) {
+                            foreach ($tags as $tag) {
+                                echo "<option value='" . htmlspecialchars($tag['id']) . "'>" . htmlspecialchars($tag['name']) . "</option>";
+                            }
+                        } else {
+                            echo "<option value=''>Aucun tag disponible</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
 
                 <!-- Image de couverture -->
                 <div>
@@ -176,16 +201,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <!-- Contenu -->
-                 
+
                 <div>
-                    <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="content" class="block text-sm font-med
+                    ium text-gray-700 mb-2">
                         Contenu de l'article
                     </label>
                     <textarea id="content" name="content" rows="8" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required></textarea>
                 </div>
-                <div>
+                <!-- <div>
                     <input id="tagsInput" name="tags" class=" w-full tagify--custom-dropdown" placeholder="Entrez des tags" value="">
-                </div>
+                </div> -->
                 <div class="flex gap-4 pt-6">
                     <button type="submit" class="flex-1 px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition duration-300">
                         <i class="fas fa-paper-plane mr-2"></i>Publier

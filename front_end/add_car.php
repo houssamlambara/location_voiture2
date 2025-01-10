@@ -107,6 +107,14 @@
           </a>
         </li>
         <li>
+          <a href="./tags.php" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-orange-500 group">
+            <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+              <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
+            </svg>
+            <span class="flex-1 ms-3 whitespace-nowrap">Ajouter Tags</span>
+          </a>
+        </li>
+        <li>
           <a href="../login/signin.php" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-orange-500 group">
             <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3" />
@@ -162,67 +170,67 @@
     </div>
 
     <div class="col-span-1 md:col-span-2 bg-white p-6 rounded-lg shadow-md overflow-x-auto lg:ml-64">
-  <h2 class="text-center text-2xl font-bold mb-8 text-yellow-500">List Voiture</h2>
-  <div>
-    <table class="w-full border-collapse border border-gray-400">
-      <thead class="bg-black">
-        <tr>
-          <th class="border border-black text-white px-4 py-2">Model</th>
-          <th class="border border-black text-white px-4 py-2">Description</th>
-          <th class="border border-black text-white px-4 py-2">Image</th>
-          <th class="border border-black text-white px-4 py-2">Prix</th>
-          <th class="border border-black text-white px-4 py-2">Statut</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php
-        include_once("../classes/db.php");
+      <h2 class="text-center text-2xl font-bold mb-8 text-yellow-500">List Voiture</h2>
+      <div>
+        <table class="w-full border-collapse border border-gray-400">
+          <thead class="bg-black">
+            <tr>
+              <th class="border border-black text-white px-4 py-2">Model</th>
+              <th class="border border-black text-white px-4 py-2">Description</th>
+              <th class="border border-black text-white px-4 py-2">Image</th>
+              <th class="border border-black text-white px-4 py-2">Prix</th>
+              <th class="border border-black text-white px-4 py-2">Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            include_once("../classes/db.php");
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_status'])) {
-            $car_id = $_POST['car_id']; 
-            $new_status = $_POST['status']; 
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['change_status'])) {
+              $car_id = $_POST['car_id'];
+              $new_status = $_POST['status'];
 
-            $update_sql = "UPDATE voiture SET status = :status WHERE id = :id";
-            $stmt = $conn->prepare($update_sql);
-            $stmt->bindParam(':status', $new_status);
-            $stmt->bindParam(':id', $car_id);
-            $stmt->execute();
-        }
+              $update_sql = "UPDATE voiture SET status = :status WHERE id = :id";
+              $stmt = $conn->prepare($update_sql);
+              $stmt->bindParam(':status', $new_status);
+              $stmt->bindParam(':id', $car_id);
+              $stmt->execute();
+            }
 
-        $sql = "SELECT * FROM `voiture`";
-        $res = $conn->query($sql);
-        while ($row = $res->fetch(PDO::FETCH_ASSOC)):
-        ?>
-          <tr class="hover:bg-orange-500">
-            <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["model"]); ?></td>
-            <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["description"]); ?></td>
-            <td class="border border-black px-4 py-2">
-              <img src="<?php echo htmlspecialchars($row["image_url"]); ?>" alt="Image" class="w-16 h-16 object-cover">
-            </td>
-            <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["prix_par_jour"]); ?> €</td>
-            <td class="border border-black px-4 py-2">
-              <form method="POST" action="">
-                <input type="hidden" name="car_id" value="<?php echo $row['id']; ?>">
-                <select name="status" class="bg-gray-200 p-2 rounded" onchange="this.form.submit()">
-                  <option value="disponible" <?php if ($row['status'] === 'disponible') echo 'selected'; ?>>Disponible</option>
-                  <option value="indisponible" <?php if ($row['status'] === 'indisponible') echo 'selected'; ?>>Indisponible</option>
-                </select>
-                <input type="hidden" name="change_status" value="1"> 
-              </form>
-            </td>
-          </tr>
-        <?php endwhile; ?>
-      </tbody>
-    </table>
-  </div>
-</div>
+            $sql = "SELECT * FROM `voiture`";
+            $res = $conn->query($sql);
+            while ($row = $res->fetch(PDO::FETCH_ASSOC)):
+            ?>
+              <tr class="hover:bg-orange-500">
+                <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["model"]); ?></td>
+                <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["description"]); ?></td>
+                <td class="border border-black px-4 py-2">
+                  <img src="<?php echo htmlspecialchars($row["image_url"]); ?>" alt="Image" class="w-16 h-16 object-cover">
+                </td>
+                <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["prix_par_jour"]); ?> €</td>
+                <td class="border border-black px-4 py-2">
+                  <form method="POST" action="">
+                    <input type="hidden" name="car_id" value="<?php echo $row['id']; ?>">
+                    <select name="status" class="bg-gray-200 p-2 rounded" onchange="this.form.submit()">
+                      <option value="disponible" <?php if ($row['status'] === 'disponible') echo 'selected'; ?>>Disponible</option>
+                      <option value="indisponible" <?php if ($row['status'] === 'indisponible') echo 'selected'; ?>>Indisponible</option>
+                    </select>
+                    <input type="hidden" name="change_status" value="1">
+                  </form>
+                </td>
+              </tr>
+            <?php endwhile; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-  <script>
-    document.getElementById('menu-toggle').addEventListener('click', function() {
-      const sidebar = document.getElementById('logo-sidebar');
-      sidebar.classList.toggle('-translate-x-full');
-    });
-  </script>
+    <script>
+      document.getElementById('menu-toggle').addEventListener('click', function() {
+        const sidebar = document.getElementById('logo-sidebar');
+        sidebar.classList.toggle('-translate-x-full');
+      });
+    </script>
 
 </body>
 

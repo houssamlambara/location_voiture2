@@ -134,30 +134,25 @@ require_once '../classes/db.php';
     <div class="p-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1">
         <!-- Add Theme Form -->
         <div class="col-span-1 bg-white p-6 rounded-lg shadow-md lg:ml-64 mt-20">
-            <h2 class="text-center text-2xl font-bold mb-8 text-yellow-500">Ajouter un Theme</h2>
-            <form action="../classes/class_theme.php" method="POST" enctype="multipart/form-data" class="space-y-4">
+            <h2 class="text-center text-2xl font-bold mb-8 text-yellow-500">Ajouter un tag</h2>
+            <form action="../classes/class_tag.php" method="POST" enctype="multipart/form-data" class="space-y-4">
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                     <input type="text" id="name" name="name" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Entrez le nom" required>
                 </div>
                 <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                    <textarea id="description" name="description" class="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Entrez la description" required></textarea>
-                </div>
-                <div>
-                    <button type="submit" class="w-full bg-yellow-400 text-white py-2 px-4 rounded-md shadow hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">Ajouter un Theme</button>
+                    <button type="submit" class="w-full bg-yellow-400 text-white py-2 px-4 rounded-md shadow hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">Ajouter un tag</button>
                 </div>
             </form>
         </div>
 
         <div class="col-span-1 md:col-span-2 bg-white p-6 rounded-lg shadow-md overflow-x-auto lg:ml-64">
-            <h2 class="text-center text-2xl font-bold mb-8 text-yellow-500">List des Themes</h2>
+            <h2 class="text-center text-2xl font-bold mb-8 text-yellow-500">List des Tags</h2>
             <div>
                 <table class="w-full border-collapse border border-gray-400">
                     <thead class="bg-black">
                         <tr>
                             <th class="border border-black text-white px-4 py-2">Name</th>
-                            <th class="border border-black text-white px-4 py-2">Description</th>
                             <th class="border border-black text-white px-4 py-2">Action</th>
                         </tr>
                     </thead>
@@ -166,13 +161,12 @@ require_once '../classes/db.php';
                         require_once '../classes/db.php';
                         $db = new Database();
                         $conn = $db->getConnection();
-                        $sql = "SELECT * FROM `themes`";
+                        $sql = "SELECT * FROM `tags`";
                         $res = $conn->query($sql);
                         while ($row = $res->fetch(PDO::FETCH_ASSOC)):
                         ?>
                             <tr class="hover:bg-orange-500">
                                 <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["name"]); ?></td>
-                                <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["description"]); ?></td>
                                 <td class="border border-black px-4 py-2">
                                     <form action="../classes/delete_theme.php" method="POST">
                                         <input type="hidden" name="theme_id" value="<?php echo $row['id']; ?>">
