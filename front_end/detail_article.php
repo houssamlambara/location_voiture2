@@ -84,7 +84,7 @@ if (!$articleDetail) {
                 </div>
 
                 <!-- Section Partage -->
-                <div class="border-t pt-6 mt-8">
+                <!-- <div class="border-t pt-6 mt-8">
                     <h3 class="text-lg font-semibold mb-4">Partager cet article</h3>
                     <div class="flex space-x-4">
                         <a href="#" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
@@ -97,7 +97,7 @@ if (!$articleDetail) {
                             <i class="fab fa-whatsapp mr-2"></i>WhatsApp
                         </a>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

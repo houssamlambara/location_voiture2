@@ -135,7 +135,6 @@ if (isset($_GET['idArticle']) && is_numeric($_GET['idArticle'])) {
             <?php endforeach; ?>
         </div>
 
-
         <!-- <button class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300">1</button> -->
 
     </div>
