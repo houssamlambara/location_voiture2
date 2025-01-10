@@ -1,53 +1,37 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-class Tag
-{
-    private $db;
+require_once 'db.php';
 
-    public function __construct($db)
-    {
-        $this->db = $db;
-    }
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $name  = $_POST['name'];
+    $tags = $_POST['tags']; // Tableau des IDs des tags sélectionnés
+    
 
-    public function tagNameExist($tagName)
-    {
-        $sql = "SELECT id FROM tags WHERE name = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$tagName]);
-        return $stmt->fetchColumn() !== false;
-    }
+    // if (isset($_FILES['image_url']) && $_FILES['image_url']['error'] == 0) {
+    //     $upload_dir = 'uploads/';
+    //     $image_url = $upload_dir . basename($_FILES['image_url']['name']);
+    //     move_uploaded_file($_FILES['image_url']['tmp_name'], $image_url);
+    // }
 
-    public function getIDbyNameTag($tagName)
-    {
-        $sql = "SELECT id FROM tags WHERE name = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$tagName]);
-        return $stmt->fetchColumn();
-    }
+    try {
+        $database = new Database();
+        $db = $database->getConnection();
 
-    public function ajoutTag($tagName)
-    {
-        $sql = "INSERT INTO tags (name) VALUES (?)";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$tagName]);
-        return $this->db->lastInsertId();
-    }
-}
+        $sql = "INSERT INTO tags (name) VALUES (:name)";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':name', $name);
 
-class TagArticle
-{
-    private $db;
-
-    public function __construct($db)
-    {
-        $this->db = $db;
-    }
-
-    public function ajouterTagArticle($articleId, $tagId)
-    {
-        $sql = "INSERT INTO article_tags (article_id, tag_id) VALUES (?, ?)";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$articleId, $tagId]);
+        if ($stmt->execute()) {
+            echo "Theme ajoutée avec succès.";
+            header("Location: ../front_end/tags.php");
+            exit;
+        } else {
+            echo "Erreur lors de l'ajout du theme.";
+        }
+    } catch (PDOException $e) {
+        echo "Erreur : " . $e->getMessage();
     }
 }
-?>
