@@ -1,3 +1,25 @@
+<?php
+require_once('../classes/db.php'); 
+
+if (isset($_GET['idArticle']) && is_numeric($_GET['idArticle'])) {
+    $idArticle = $_GET['idArticle'];
+
+    $stmt = $pdo->prepare("SELECT * FROM articles WHERE idArticle = :idArticle");
+    $stmt->bindParam(':idArticle', $idArticle, PDO::PARAM_INT);
+    $stmt->execute();
+
+    if ($article = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $titre = htmlspecialchars($article['title']);
+        $description = htmlspecialchars($article['description']);
+        $imagePath = htmlspecialchars($article['imagePath']);
+        $content = nl2br(htmlspecialchars($article['content']));
+    } else {
+        $error = "Article introuvable.";
+    }
+} else {
+    $error = "ID d'article invalide.";
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -105,12 +127,12 @@
                             </div>
                         </div>
                         <div class="mt-4 flex space-x-2">
-                            <a href="../front_end/reservation.php" class="w-full bg-yellow-500 text-white py-2 rounded-md hover:bg-yellow-400 text-center flex items-center justify-center">Lire L'article</a>
+                        <a href="../front_end/detail_article.php?id=<?= htmlspecialchars($blog['id']) ?>"
+                        class="w-full bg-yellow-500 text-white py-2 rounded-md hover:bg-yellow-400 text-center flex items-center justify-center">Lire L'article</a>
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
-
         </div>
 
 

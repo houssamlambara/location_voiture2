@@ -1,24 +1,46 @@
 <?php
-class Comment {
-    private $db;
+require_once "./db.php";
 
-    public function __construct() {
-        $this->db = Database::getInstance()->getConnection();
+class comments {
+
+    public function getCommentsByArticleId($pdo, $idArticle) {
+        try {
+            $sql = 'SELECT comments.*, users.nom FROM comments INNER JOIN users ON users.idUser = comments.idUser WHERE idArticle = :idArticle';
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['idArticle' => $idArticle]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return [];
+        }
     }
 
-    public function getByArticleId($articleId) {
-        $sql = "SELECT c.*, u.username FROM COMMENTS c 
-                JOIN USERS u ON c.user_id = u.id 
-                WHERE c.article_id = ?";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$articleId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function addComment($pdo, $idArticle, $idUser, $content) {
+        try {
+            $stmt = $pdo->prepare('INSERT INTO comments(idArticle, idUser, content) VALUES (?, ?, ?)');
+            $stmt->execute([$idArticle, $idUser, $content]);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+        }
     }
 
-    public function addComment($articleId, $userId, $content) {
-        $sql = "INSERT INTO COMMENTS (article_id, user_id, content) VALUES (?, ?, ?)";
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute([$articleId, $userId, $content]);
+    public function editComment($pdo, $idComment, $idUser, $content) {
+        try {
+            $stmt = $pdo->prepare('UPDATE comments SET content = ? WHERE idComment = ? AND idUser = ?');
+            $stmt->execute([$content, $idComment, $idUser]);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+        }
+    }
+
+    public function deleteComment($pdo, $idComment, $idUser) {
+        try {
+            $stmt = $pdo->prepare('UPDATE comments SET visible = false WHERE idComment = ? AND idUser = ?');
+            $stmt->execute([$idComment, $idUser]);
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+        }
     }
 }
+?>
 ?>
