@@ -26,9 +26,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $imageUrl = $finalPath;
             } else {
                 echo "Erreur lors du téléchargement de l'image.";
+                exit();
             }
         } else {
             echo "Extension non autorisée pour l'image.";
+            exit();
         }
     }
 
@@ -66,6 +68,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -108,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </nav>
 
-    <!-- Main Content with Padding Top to Account for Fixed Navbar -->
+    <!-- Main Content -->
     <main class="pt-24 pb-12 px-4">
         <form class="max-w-2xl mx-auto p-8 bg-white rounded-xl shadow-lg" method="POST" enctype="multipart/form-data">
             <h2 class="flex justify-center text-3xl font-bold mb-8 text-yellow-400">Ajouter un nouvel article</h2>
@@ -130,8 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <select id="category" name="category" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required>
                         <option value="">Sélectionner un thème</option>
                         <?php
-                        include_once("../classes/db.php");
-
                         try {
                             $db = new Database();
                             $pdo = $db->getConnection();
@@ -150,7 +152,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         } else {
                             echo "<option value=''>Aucun thème disponible</option>";
                         }
-
                         ?>
                     </select>
                 </div>
@@ -175,55 +176,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <!-- Contenu -->
+                 
                 <div>
                     <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
                         Contenu de l'article
                     </label>
                     <textarea id="content" name="content" rows="8" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required></textarea>
                 </div>
-
-                <!-- Tags -->
                 <div>
-                    <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
-                        Tag principal
-                    </label>
-                    <select id="tags" name="tags" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300">
-                        <option value="">Sélectionner un tag</option>
-                        <option value="luxe">Luxe</option>
-                        <option value="sport">Sport</option>
-                        <option value="familiale">Familiale</option>
-                        <option value="citadine">Citadine</option>
-                        <option value="suv">SUV</option>
-                        <option value="electrique">Électrique</option>
-                        <option value="hybride">Hybride</option>
-                        <option value="occasion">Occasion</option>
-                        <option value="nouveaute">Nouveauté</option>
-                        <option value="performance">Performance</option>
-                    </select>
+                    <input id="tagsInput" name="tags" class=" w-full tagify--custom-dropdown" placeholder="Entrez des tags" value="">
                 </div>
-
                 <div class="flex gap-4 pt-6">
-                    <button type="submit"
-                        class="flex-1 px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition duration-300">
+                    <button type="submit" class="flex-1 px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition duration-300">
                         <i class="fas fa-paper-plane mr-2"></i>Publier
                     </button>
-                    <button type="reset"
-                        class="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-300">
+                    <button type="reset" class="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-300">
                         <i class="fas fa-undo mr-2"></i>Réinitialiser
                     </button>
                 </div>
             </div>
         </form>
-
     </main>
+
+    <script>
+        const inputElement = document.querySelector('#tagsInput');
+        new Tagify(inputElement, {
+            delimiters: ", ",
+            maxTags: 5,
+        });
+    </script>
 </body>
 
 </html>
+
 <!-- Footer Amélioré -->
 <footer class="bg-gradient-to-r from-gray-900 to-black text-white py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <!-- Colonnes précédentes avec des améliorations visuelles subtiles -->
             <div>
                 <img src="https://via.placeholder.com/150x50?text=RoadRover" alt="RoadRover Logo" class="mb-4 mx-auto transform hover:scale-110 transition duration-300">
                 <p class="text-sm text-gray-400">RoadRover - Votre partenaire de confiance pour la location de voitures de luxe.</p>

@@ -124,6 +124,7 @@ require_once '../classes/db.php';
 
     <!-- Main Content -->
     <div class="p-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1">
+        <!-- Add Theme Form -->
         <div class="col-span-1 bg-white p-6 rounded-lg shadow-md lg:ml-64 mt-20">
             <h2 class="text-center text-2xl font-bold mb-8 text-yellow-500">Ajouter un Theme</h2>
             <form action="../classes/class_theme.php" method="POST" enctype="multipart/form-data" class="space-y-4">
@@ -140,6 +141,7 @@ require_once '../classes/db.php';
                 </div>
             </form>
         </div>
+
         <div class="col-span-1 md:col-span-2 bg-white p-6 rounded-lg shadow-md overflow-x-auto lg:ml-64">
             <h2 class="text-center text-2xl font-bold mb-8 text-yellow-500">List des Themes</h2>
             <div>
@@ -148,6 +150,7 @@ require_once '../classes/db.php';
                         <tr>
                             <th class="border border-black text-white px-4 py-2">Name</th>
                             <th class="border border-black text-white px-4 py-2">Description</th>
+                            <th class="border border-black text-white px-4 py-2">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -162,6 +165,13 @@ require_once '../classes/db.php';
                             <tr class="hover:bg-orange-500">
                                 <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["name"]); ?></td>
                                 <td class="border border-black px-4 py-2"><?php echo htmlspecialchars($row["description"]); ?></td>
+                                <td class="border border-black px-4 py-2">
+                                    <form action="../classes/delete_theme.php" method="POST">
+                                        <input type="hidden" name="theme_id" value="<?php echo $row['id']; ?>">
+                                        <button type="submit" class="flex justify-center bg-red-500 text-white px-4 py-2 rounded">Delete</button>
+
+                                    </form>
+                                </td>
                             </tr>
                         <?php endwhile; ?>
                     </tbody>
@@ -169,6 +179,7 @@ require_once '../classes/db.php';
             </div>
         </div>
     </div>
+
 
     <script>
         document.getElementById('menu-toggle').addEventListener('click', function() {

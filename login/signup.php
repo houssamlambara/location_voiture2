@@ -56,15 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a href="../front_end/article.php" class="text-white nav-hover hover:bg-yellow-500 px-3 py-2 rounded-md text-sm font-medium">Article</a>
                     </div>
                 </div>
-                </div>
                 <div>
-                    <a href="./signin.php" class="bg-yellow-500 text-white px-4 py-2 rounded-full hover:bg-yellow-500 text-sm font-medium shadow-md transform hover:scale-105 transition duration-300">
+                    <a href="./signin.php" class="bg-yellow-400 text-white px-4 py-2 rounded-full hover:bg-yellow-500 text-sm font-medium shadow-md transform hover:scale-105 transition duration-300">
                         Sign In
                     </a>
                 </div>
             </div>
         </div>
     </nav>
+
 
     <!-- Main Content -->
     <main class="flex items-center justify-center min-h-screen bg-gray-50 pt-24 pb-12">

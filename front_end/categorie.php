@@ -50,9 +50,25 @@
             </div>
         </div>
     </nav>
-    <!-- Page de Catégorie de Voitures -->
+
     <div class="container mx-auto px-4 py-16">
-        <h1 class="text-4xl font-bold text-center mt-12 mb-12">Nos Premium Voitures</h1>
+        <h1 class="text-4xl font-bold text-center text-yellow-500 mt-12 mb-12">Nos Premium Voitures</h1>
+
+        <!-- Barre de recherche -->
+        <div class="max-w-2xl mx-auto mb-8">
+            <form action="" method="GET" class="relative">
+                <input type="text" name="search" placeholder="Rechercher une voiture par modèle, marque..." 
+                       class="w-full px-4 py-3 pl-12 pr-10 text-gray-700 bg-white border border-gray-300 rounded-full focus:outline-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 transition duration-300"
+                       value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-gray-400"></i>
+                </div>
+                <button type="submit" class="absolute inset-y-0 right-0 px-4 text-gray-600 hover:text-yellow-500 focus:outline-none">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+
 
         <!-- Filtres de Catégorie -->
         <div class="flex justify-center mb-12 space-x-4">
@@ -85,7 +101,7 @@
                     <div class="p-4">
                         <h3 class="text-xl font-semibold mb-2"><?= htmlspecialchars($car['model']) ?></h3>
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600"><?= htmlspecialchars($car['prix_par_jour']) ?>/jour</span>
+                            <span class="text-gray-600"><?= htmlspecialchars($car['prix_par_jour']) ?>$/jour</span>
                             <div class="flex items-center">
                                 <i class="fas fa-user mr-2"></i>4
                                 <i class="fas fa-gas-pump ml-2 mr-2"></i>Essence
@@ -98,13 +114,9 @@
                     </div>
                 </div>
             <?php endforeach; ?>
-
         </div>
-
-
-        <!-- <button class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300">1</button> -->
-
     </div>
+
     <!-- Pagination -->
     <div class="w-full">
         <div class="pagination">
