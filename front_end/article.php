@@ -112,125 +112,202 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="pt-24 pb-12 px-4">
-        <form class="max-w-2xl mx-auto p-8 bg-white rounded-xl shadow-lg" method="POST" enctype="multipart/form-data">
-            <h2 class="flex justify-center text-3xl font-bold mb-8 text-yellow-400">Ajouter un nouvel article</h2>
+   <!-- Main Content -->
+<main class="pt-24 pb-12 px-4">
+    <form class="max-w-2xl mx-auto p-8 bg-white rounded-xl shadow-lg" method="POST" enctype="multipart/form-data">
+        <h2 class="flex justify-center text-3xl font-bold mb-8 text-yellow-400">Ajouter un nouvel article</h2>
 
-            <div class="space-y-6">
-                <!-- Titre -->
-                <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
-                        Titre de l'article
-                    </label>
-                    <input type="text" id="title" name="title" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required>
-                </div>
+        <div class="space-y-6">
+            <!-- Titre -->
+            <div>
+                <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                    Titre de l'article
+                </label>
+                <input type="text" id="title" name="title" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required>
+            </div>
 
-                <!-- Catégorie -->
-                <div>
-                    <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
-                        Sélectionner un thème
-                    </label>
-                    <select id="category" name="category" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required>
-                        <option value="">Sélectionner un thème</option>
-                        <?php
-                        try {
-                            $db = new Database();
-                            $pdo = $db->getConnection();
+            <!-- Catégorie -->
+            <div>
+                <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+                    Sélectionner un thème
+                </label>
+                <select id="category" name="category" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required>
+                    <option value="">Sélectionner un thème</option>
+                    <?php
+                    try {
+                        $db = new Database();
+                        $pdo = $db->getConnection();
 
-                            $stmt = $pdo->prepare("SELECT * FROM themes");
-                            $stmt->execute();
-                            $themes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        } catch (PDOException $e) {
-                            echo "<option value=''>Erreur de chargement des thèmes</option>";
+                        $stmt = $pdo->prepare("SELECT * FROM themes");
+                        $stmt->execute();
+                        $themes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    } catch (PDOException $e) {
+                        echo "<option value=''>Erreur de chargement des thèmes</option>";
+                    }
+
+                    if ($themes && count($themes) > 0) {
+                        foreach ($themes as $theme) {
+                            echo "<option value='" . htmlspecialchars($theme['id']) . "'>" . htmlspecialchars($theme['name']) . "</option>";
                         }
+                    }
+                    ?>
+                </select>
+            </div>
 
-                        if ($themes && count($themes) > 0) {
-                            foreach ($themes as $theme) {
-                                echo "<option value='" . htmlspecialchars($theme['id']) . "'>" . htmlspecialchars($theme['name']) . "</option>";
+            <!-- Tags avec sélection multiple -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Sélectionner des tags (maximum 5)
+                </label>
+                <div id="tagsContainer">
+                    <div class="tag-selection flex items-center gap-2 mb-3">
+                        <select name="tags[]" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300">
+                            <option value="">Sélectionner un tag</option>
+                            <?php
+                            try {
+                                $stmt = $pdo->prepare("SELECT * FROM tags");
+                                $stmt->execute();
+                                $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                
+                                if ($tags && count($tags) > 0) {
+                                    foreach ($tags as $tag) {
+                                        echo "<option value='" . htmlspecialchars($tag['id']) . "'>" . htmlspecialchars($tag['name']) . "</option>";
+                                    }
+                                }
+                            } catch (PDOException $e) {
+                                echo "<option value=''>Erreur de chargement des tags</option>";
                             }
-                        } else {
-                            echo "<option value=''>Aucun thème disponible</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div>
-                    <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
-                        Sélectionner des tags
-                    </label>
-                    <select id="tags" name="tags[]" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required>
-                        <option value="">Sélectionner des tags</option>
-                        <?php
-                        try {
-                            $stmt = $pdo->prepare("SELECT * FROM tags");
-                            $stmt->execute();
-                            $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        } catch (PDOException $e) {
-                            echo "<option value=''>Erreur de chargement des tags</option>";
-                        }
-
-                        if ($tags && count($tags) > 0) {
-                            foreach ($tags as $tag) {
-                                echo "<option value='" . htmlspecialchars($tag['id']) . "'>" . htmlspecialchars($tag['name']) . "</option>";
-                            }
-                        } else {
-                            echo "<option value=''>Aucun tag disponible</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-
-                <!-- Image de couverture -->
-                <div>
-                    <label for="image_url" class="block text-sm font-medium text-gray-700 mb-2">
-                        Image de couverture
-                    </label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-yellow-500 transition duration-300">
-                        <div class="space-y-1 text-center">
-                            <i class="fas fa-image text-gray-400 text-3xl mb-3"></i>
-                            <div class="flex text-sm text-gray-600 justify-center">
-                                <label for="image_url" class="relative cursor-pointer bg-white rounded-md font-medium text-yellow-500 hover:text-yellow-600">
-                                    <span>Télécharger une image</span>
-                                    <input type="file" id="image_url" name="image_url" class="sr-only" accept="image/*" required>
-                                </label>
-                            </div>
-                            <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB</p>
-                        </div>
+                            ?>
+                        </select>
+                        <button type="button" class="remove-tag px-3 py-2 text-red-500 hover:text-red-700 hidden">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                 </div>
+                
+                <button type="button" id="addTagBtn" class="mt-2 flex items-center text-yellow-500 hover:text-yellow-600 font-medium">
+                    <i class="fas fa-plus-circle mr-2"></i>
+                    Ajouter un tag
+                </button>
 
-                <!-- Contenu -->
+                <!-- Tags sélectionnés -->
+                <div id="selectedTags" class="mt-4 flex flex-wrap gap-2"></div>
+            </div>
 
-                <div>
-                    <label for="content" class="block text-sm font-med
-                    ium text-gray-700 mb-2">
-                        Contenu de l'article
-                    </label>
-                    <textarea id="content" name="content" rows="8" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required></textarea>
-                </div>
-                <!-- <div>
-                    <input id="tagsInput" name="tags" class=" w-full tagify--custom-dropdown" placeholder="Entrez des tags" value="">
-                </div> -->
-                <div class="flex gap-4 pt-6">
-                    <button type="submit" class="flex-1 px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition duration-300">
-                        <i class="fas fa-paper-plane mr-2"></i>Publier
-                    </button>
-                    <button type="reset" class="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-300">
-                        <i class="fas fa-undo mr-2"></i>Réinitialiser
-                    </button>
+            <!-- Image de couverture -->
+            <div>
+                <label for="image_url" class="block text-sm font-medium text-gray-700 mb-2">
+                    Image de couverture
+                </label>
+                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-yellow-500 transition duration-300">
+                    <div class="space-y-1 text-center">
+                        <i class="fas fa-image text-gray-400 text-3xl mb-3"></i>
+                        <div class="flex text-sm text-gray-600 justify-center">
+                            <label for="image_url" class="relative cursor-pointer bg-white rounded-md font-medium text-yellow-500 hover:text-yellow-600">
+                                <span>Télécharger une image</span>
+                                <input type="file" id="image_url" name="image_url" class="sr-only" accept="image/*" required>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB</p>
+                    </div>
                 </div>
             </div>
-        </form>
-    </main>
 
-    <script>
-        const inputElement = document.querySelector('#tagsInput');
-        new Tagify(inputElement, {
-            delimiters: ", ",
-            maxTags: 5,
+            <!-- Contenu -->
+            <div>
+                <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
+                    Contenu de l'article
+                </label>
+                <textarea id="content" name="content" rows="8" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300" required></textarea>
+            </div>
+
+            <div class="flex gap-4 pt-6">
+                <button type="submit" class="flex-1 px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition duration-300">
+                    <i class="fas fa-paper-plane mr-2"></i>Publier
+                </button>
+                <button type="reset" class="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-300">
+                    <i class="fas fa-undo mr-2"></i>Réinitialiser
+                </button>
+            </div>
+        </div>
+    </form>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tagsContainer = document.getElementById('tagsContainer');
+    const addTagBtn = document.getElementById('addTagBtn');
+    const selectedTags = document.getElementById('selectedTags');
+    let tagCount = 1;
+
+    function updateSelectedTags() {
+        selectedTags.innerHTML = '';
+        const selections = document.querySelectorAll('select[name="tags[]"]');
+        const selectedValues = new Set();
+
+        selections.forEach(select => {
+            if (select.value) {
+                const selectedOption = select.options[select.selectedIndex];
+                if (!selectedValues.has(select.value)) {
+                    selectedValues.add(select.value);
+                    const tagBadge = document.createElement('div');
+                    tagBadge.className = 'bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm';
+                    tagBadge.textContent = selectedOption.text;
+                    selectedTags.appendChild(tagBadge);
+                }
+            }
         });
-    </script>
+    }
+
+    addTagBtn.addEventListener('click', function() {
+        if (tagCount >= 5) {
+            alert('Vous ne pouvez pas ajouter plus de 5 tags');
+            return;
+        }
+
+        const newTagSelection = document.createElement('div');
+        newTagSelection.className = 'tag-selection flex items-center gap-2 mb-3';
+        newTagSelection.innerHTML = `
+            <select name="tags[]" class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300">
+                ${document.querySelector('select[name="tags[]"]').innerHTML}
+            </select>
+            <button type="button" class="remove-tag px-3 py-2 text-red-500 hover:text-red-700">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+
+        tagsContainer.appendChild(newTagSelection);
+        tagCount++;
+
+        if (tagCount > 1) {
+            document.querySelectorAll('.remove-tag').forEach(btn => btn.classList.remove('hidden'));
+        }
+
+        newTagSelection.querySelector('select').addEventListener('change', updateSelectedTags);
+
+        newTagSelection.querySelector('.remove-tag').addEventListener('click', function() {
+            newTagSelection.remove();
+            tagCount--;
+            if (tagCount === 1) {
+                document.querySelector('.remove-tag').classList.add('hidden');
+            }
+            updateSelectedTags();
+        });
+    });
+
+    document.querySelector('select[name="tags[]"]').addEventListener('change', updateSelectedTags);
+
+    document.querySelector('button[type="reset"]').addEventListener('click', function() {
+        const tagSelections = document.querySelectorAll('.tag-selection');
+        tagSelections.forEach((tag, index) => {
+            if (index > 0) tag.remove();
+        });
+        tagCount = 1;
+        document.querySelector('.remove-tag').classList.add('hidden');
+        updateSelectedTags();
+    });
+});
+</script>
 </body>
 
 </html>
